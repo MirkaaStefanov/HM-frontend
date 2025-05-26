@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Properties</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    /* Add this to your styles.css or keep it here for now */
+    .product-card-link {
+        text-decoration: none; /* Removes underline */
+        color: inherit;      /* Ensures text color is inherited, not default blue */
+        display: block;      /* Makes the entire link act as a block, so the whole card is clickable */
+    }
+
+    /* Optional: Add hover effects to the linked card */
+    .product-card-link:hover .product-card {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+    .product-card-link:hover .product-card .product-image {
+        transform: scale(1.03); /* Slightly zoom on image hover */
+    }
+
+    /* Important: Ensure elements can be hidden */
+    .product-card {
+        /* Your existing card styles */
+        display: flex; /* Or block, grid, etc., depending on your layout */
+        flex-direction: column; /* Often good for cards */
+        /* ... other styles */
+    }
+    .product-card.hidden {
+        display: none; /* Class to hide elements */
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: navigation-bar}"></div>
+
+<header class="hero-section">
+  <h1>Find Your New Home</h1>
+  <button class="search-button-main">Search</button>
+</header>
+
+<section class="filter-section">
+  <div class="filter-container">
+    <input type="text" id="global-search-input" class="filter-search-input" placeholder="Търсене по име, описание, състояние, цена или площ...">
+    <div class="filter-dropdown-group">
+      <select class="filter-select" id="type-filter">
+        <option value="" disabled selected>Type</option>
+        <option value="apartment">Apartment</option>
+        <option value="house">House</option>
+        <option value="condo">Condo</option>
+      </select>
+    </div>
+    <div class="filter-dropdown-group">
+      <select class="filter-select" id="price-filter">
+        <option value="" disabled selected>Price</option>
+        <option value="0-300000">$0 - $300,000</option>
+        <option value="300000-500000">$300,000 - $500,000</option>
+        <option value="500000+">$500,000+</option>
+      </select>
+    </div>
+    <div class="filter-dropdown-group">
+      <select class="filter-select" id="beds-filter">
+        <option value="" disabled selected>Beds</option>
+        <option value="1">1 Bed</option>
+        <option value="2">2 Beds</option>
+        <option value="3">3 Beds</option>
+        <option value="4+">4+ Beds</option>
+      </select>
+    </div>
+    <button class="filter-favorite-btn"><i class="far fa-heart"></i></button>
+  </div>
+</section>
+
+<main class="product-grid-container">
+  <div class="product-grid" id="product-grid-container" th:if="${products != null && !products.isEmpty()}">
+    <a th:href="@{/product/{id}(id=${product.id})}" class="product-card-link" th:each="product : ${products}" th:data-product-id="${product.id}">
+      <div class="product-card" th:id="'product-card-' + ${product.id}">
+        <div class="product-image-container">
+          <img th:if="${product.imageStrings != null && !product.imageStrings.isEmpty()}"
+               th:src="'data:image/jpeg;base64,' + ${product.imageStrings[0]}"
+               alt="Property Image" class="product-image">
+          <img th:if="${product.imageStrings == null || product.imageStrings.isEmpty()}"
+               th:src="@{/img/photos/noImage.png}" alt="Default Property Image" class="product-image">
+          <button class="like-button"><i class="far fa-heart"></i></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name" th:id="'product-name-' + ${product.id}" th:text="${product.name}">Modern Apartment</h3>
+          <p class="product-description-text" style="display: none;" th:id="'product-description-' + ${product.id}" th:text="${product.description}"></p>
+          <p class="product-price" th:id="'product-price-' + ${product.id}" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}+' Лв.'"></p>
+          <div class="product-details">
+            <span class="product-area" th:id="'product-area-' + ${product.id}" th:text="${product.area} + ' кв.м'"></span>
+            <span th:if="${product.area != null and product.state != null}"> &middot; </span>
+            <span class="product-state" th:id="'product-state-' + ${product.id}" th:if="${product.state != null}" th:text="${product.state.displayText}">State</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div th:if="${products == null || products.isEmpty()}" id="no-products-message">
+    <p>Няма намерени имоти.</p>
+  </div>
+</main>
+
+<footer>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('global-search-input');
+    const productGrid = document.getElementById('product-grid-container');
+    const noProductsMessage = document.getElementById('no-products-message');
+
+    const allProductCards = document.querySelectorAll('.product-grid .product-card-link');
+
+    // Initial state: hide no-products-message if cards exist
+    if (allProductCards.length > 0) {
+        if (noProductsMessage) {
+            noProductsMessage.style.display = 'none';
+        }
+    } else {
+         if (noProductsMessage) {
+            noProductsMessage.style.display = 'block';
+        }
+    }
+
+    const applySearchFilter = () => {
+        const filter = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        allProductCards.forEach(cardLink => {
+            const productId = cardLink.dataset.productId;
+
+            const name = document.getElementById('product-name-' + productId)?.textContent.toLowerCase() || '';
+            const description = document.getElementById('product-description-' + productId)?.textContent.toLowerCase() || '';
+            const state = document.getElementById('product-state-' + productId)?.textContent.toLowerCase() || '';
+            const priceText = document.getElementById('product-price-' + productId)?.textContent.toLowerCase() || '';
+            const areaText = document.getElementById('product-area-' + productId)?.textContent.toLowerCase() || '';
+
+            const searchableText = [
+                name,
+                description,
+                state,
+                priceText,
+                areaText
+            ].join(' '); // Join with spaces
+
+            let isMatch = false;
+
+            if (filter === '') {
+                isMatch = true; // Show all if filter is empty
+            } else {
+                // Primary text search
+                if (searchableText.includes(filter)) {
+                    isMatch = true;
+                }
+
+                // Enhanced numerical search for price and area (if filter is numeric)
+                const filterNum = parseFloat(filter.replace(/[^0-9.]/g, ''));
+                if (!isNaN(filterNum)) {
+                    const numericPrice = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+                    const numericArea = parseFloat(areaText.replace(/[^0-9.]/g, ''));
+
+                    if ((!isNaN(numericPrice) && numericPrice === filterNum) ||
+                        (!isNaN(numericArea) && numericArea === filterNum) ||
+                        (!isNaN(numericPrice) && String(numericPrice).includes(String(filterNum))) ||
+                        (!isNaN(numericArea) && String(numericArea).includes(String(filterNum)))) {
+                        isMatch = true;
+                    }
+                }
+            }
+
+            if (isMatch) {
+                cardLink.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                cardLink.classList.add('hidden');
+            }
+        });
+
+        if (noProductsMessage) {
+            if (visibleCount === 0) {
+                noProductsMessage.style.display = 'block';
+            } else {
+                noProductsMessage.style.display = 'none';
+            }
+        }
+    };
+
+    searchInput.addEventListener('keyup', applySearchFilter);
+    searchInput.addEventListener('change', applySearchFilter);
+    applySearchFilter();
+});
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@ public interface ProductClient {
     ProductDTO save(@RequestBody ProductDTO productDTO, @RequestHeader("Authorization") String auth);
 
     @GetMapping("/all")
-    List<ProductDTO> findAll(@RequestHeader("Authorization") String auth);
+    List<ProductDTO> findAll();
 
     @GetMapping("/findById/{id}")
     ProductDTO findById(@PathVariable Long id, @RequestHeader("Authorization") String auth);

@@ -12,7 +12,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(){
-        return "index";
+        return "redirect:/all";
     }
 
 
