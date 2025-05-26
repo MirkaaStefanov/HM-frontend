@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="sidebar" th:fragment="header">
+  <div class="sidebar-header">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+  </div>
+
+  <ul class="nav flex-column">
+
+    <li class="nav-item">
+      <a class="nav-link" href="/">
+        <i class="fas fa-home fa-fw me-2"></i> <span class="nav-text">Home</span>
+      </a>
+    </li>
+
+    <!-- Login / Logout with Consistent Design -->
+    <th:block th:if="${session.sessionToken == null}">
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/login">
+          <i class="fas fa-sign-in-alt fa-fw me-2"></i> <span class="nav-text">Впиши се</span>
+        </a>
+      </li>
+    </th:block>
+
+    <th:block th:if="${session.sessionToken != null}">
+      <li class="nav-item">
+        <a class="nav-link" href="/auth/logout">
+          <i class="fas fa-sign-out-alt fa-fw me-2"></i> <span class="nav-text">Излез</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/user/profile">
+          <i class="fas fa-user-tie fa-fw me-2"></i> <span class="nav-text">Профил</span>
+        </a>
+      </li>
+    </th:block>
+
+    <!-- Only Show for Admins -->
+    <th:block th:if="${session.sessionRole == 'ADMIN'}">
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-box-open fa-fw me-2"></i> <span class="nav-text">Apparatus</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/finalProduct/all}">
+          <i class="fas fa-tools fa-fw me-2"></i> <span class="nav-text">Aletler</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/midProduct/all}">
+          <i class="fas fa-tools fa-fw me-2"></i> <span class="nav-text">Birlesik Malzemeler</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/firstProduct/all}">
+          <i class="fas fa-tools fa-fw me-2"></i> <span class="nav-text">Ilk Malzemeler</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-chart-line fa-fw me-2"></i> <span class="nav-text">Overview</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/finalProductOrder/all}">
+          <i class="fas fa-dolly-flatbed fa-fw me-2"></i><span class="nav-text">Alet siparisleri</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/midProductOrder/all}">
+          <i class="fas fa-dolly-flatbed fa-fw me-2"></i><span class="nav-text">Birlesik siparisleri</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/firstProductOrder/all}">
+          <i class="fas fa-dolly-flatbed fa-fw me-2"></i><span class="nav-text">Ilk malzeme siparisleri</span>
+        </a>
+      </li>
+    </th:block>
+    <th:block th:if="${session.sessionRole == 'METALIST'}">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/firstProductOrder/all-metal}">
+          <i class="fas fa-tools fa-fw me-2"></i> <span class="nav-text">Metal siparisler</span>
+        </a>
+      </li>
+
+    </th:block>
+  </ul>
+</div>
+
+</body>
+</html>
