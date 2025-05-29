@@ -21,6 +21,11 @@ public class ProductDTO {
     private double price;
     private int area;
     private State state;
+    private String city;
+    private int rooms;
+    private RegionDTO region;
+    @JsonIgnore
+    private Long regionId;
     @JsonIgnore
     private List<MultipartFile> imageFiles;
     private boolean deleted;

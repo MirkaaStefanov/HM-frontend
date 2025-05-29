@@ -6,6 +6,8 @@
   <title>Добавяне на Имот</title>
   <link rel="icon" type="image/x-icon" th:href="@{/img/photos/noImage.png}">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 <body>
 
@@ -15,7 +17,7 @@
   <div class="form-page-container">
     <h1 class="form-page-title">Добавяне на Нов Имот</h1>
 
-    <form th:action="@{/submit}" th:object="${product}" method="post" enctype="multipart/form-data" class="styled-form">
+    <form th:action="@{/product/submit}" th:object="${product}" method="post" enctype="multipart/form-data" class="styled-form">
 
       <div class="form-group">
         <label for="name" class="form-label">Име на имота</label>
@@ -36,6 +38,26 @@
         <label for="area" class="form-label">Площ (кв.м)</label>
         <input type="number" id="area" th:field="*{area}" class="form-control" placeholder="Напр. 85" min="1" required>
       </div>
+
+      <div class="form-group">
+        <label for="rooms" class="form-label">Стаи</label>
+        <input type="number" id="rooms" th:field="*{rooms}" class="form-control" placeholder="3" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="city" class="form-label">Град</label>
+        <input type="text" id="city" th:field="*{city}" class="form-control" placeholder="Напр. Търговище" required>
+      </div>
+
+      <div class="form-group">
+        <label for="region" class="form-label">Област</label>
+        <select id="region" th:field="*{regionId}" class="form-control searchable-select" required> <option value="">Изберете област</option>
+          <option th:each="region : ${regions}"
+                  th:value="${region.id}"
+                  th:text="${region.name}"> </option>
+        </select>
+      </div>
+
 
       <div class="form-group">
         <label for="state" class="form-label">Състояние</label>
@@ -59,11 +81,28 @@
 
       <div class="form-link-group register-link-group">
         <span>Или</span>
-        <a th:href="@{/all}" class="btn-form-secondary">Отказ / Върни се</a>
+        <a th:href="@{/product/all}" class="btn-form-secondary">Отказ / Върни се</a>
       </div>
     </form>
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<script>
+  $(document).ready(function() {
+    // Initialize Select2 on the element with the class 'searchable-select'
+    $('.searchable-select').select2({
+      placeholder: "Изберете регион", // Optional: A placeholder for the search box
+      allowClear: true // Optional: Adds a clear button
+    });
+
+    // You can also target by ID if you prefer and have only one such select
+    // $('#region').select2({
+    //   placeholder: "Изберете регион",
+    //   allowClear: true
+    // });
+  });
+</script>
 </body>
 </html>

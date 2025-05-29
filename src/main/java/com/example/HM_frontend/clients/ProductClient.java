@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -29,4 +30,18 @@ public interface ProductClient {
 
     @DeleteMapping("/delete/{id}")
     void delete(@PathVariable Long id, @RequestHeader("Authorization") String auth);
+
+    @GetMapping("/filter")
+    List<ProductDTO> filterProducts(
+            @RequestParam(required = false) String globalSearchText,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Integer minArea,
+            @RequestParam(required = false) Integer maxArea,
+            @RequestParam(required = false) Integer minRooms,
+            @RequestParam(required = false) Integer maxRooms,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam(required = false) String state
+    );
 }
