@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -141,4 +143,27 @@ public class ProductController {
         productClient.delete(id, token);
         return "redirect:/product/all";
     }
+
+    @PostMapping("/like/{id}")
+    @ResponseBody // <-- IMPORTANT: Tells Spring to return data, not a view
+    public ResponseEntity<Void> likeProduct(@PathVariable Long id, HttpServletRequest request) {
+        try {
+            String token = (String) request.getSession().getAttribute("sessionToken");
+            if (token == null) {
+                // The user is not logged in, return "Unauthorized"
+                return ResponseEntity.status(401).build();
+            }
+            // Call the backend API via the client
+            productClient.like(id, token);
+
+            // On success, return an HTTP 200 OK response with no body
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            log.error("Error liking product id={}: {}", id, e.getMessage());
+            // If anything goes wrong, return an Internal Server Error status
+            return ResponseEntity.status(500).build();
+        }
+    }
+
 }
