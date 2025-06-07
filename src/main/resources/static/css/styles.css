@@ -106,6 +106,422 @@ body {
     color: var(--text-color);
     font-weight: 700;
 }
+  /* Specific styles for the product detail page */
+    .detail-container {
+        max-width: 1000px;
+        margin: calc(var(--navbar-height) + 30px) auto 40px auto;
+        padding: 20px;
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .detail-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .detail-title {
+        font-size: 2.5rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .detail-location {
+        font-size: 1.1rem;
+        color: var(--light-text-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    /* --- New/Modified CSS for Carousel --- */
+    .image-carousel-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px; /* Adjust max width of carousel */
+        margin: 0 auto 30px auto; /* Center carousel */
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        background-color: var(--card-bg); /* Ensure background for seamless look */
+    }
+
+    .carousel-main-image-wrapper {
+        position: relative;
+        width: 100%;
+        padding-bottom: 60%; /* Aspect ratio for main image (e.g., 50% for 2:1, 75% for 4:3, 60% is common) */
+        background-color: #f0f0f0; /* Placeholder background */
+    }
+
+    .carousel-main-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .carousel-main-image:hover {
+        transform: scale(1.01); /* Subtle zoom on hover */
+    }
+
+    .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 1.5rem;
+        border-radius: 50%;
+        z-index: 10;
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px; /* Fixed size */
+        height: 45px; /* Fixed size */
+    }
+
+    .carousel-nav:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .carousel-nav.prev {
+        left: 15px;
+    }
+
+    .carousel-nav.next {
+        right: 15px;
+    }
+
+    .carousel-dots-container {
+        text-align: center;
+        padding: 15px 0;
+        background-color: var(--card-bg);
+        border-top: 1px solid var(--border-color);
+        display: flex; /* Use flexbox to center dots horizontally */
+        justify-content: center;
+        flex-wrap: wrap; /* Allow dots to wrap if too many */
+    }
+
+    .carousel-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin: 0 6px;
+        background-color: var(--light-text-color);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .carousel-dot.active {
+        background-color: var(--card-accent-color);
+        transform: scale(1.2);
+    }
+
+    .carousel-dot:hover:not(.active) {
+        background-color: #888;
+    }
+
+    /* --- New CSS for Thumbnail Gallery --- */
+    .thumbnail-gallery {
+        max-width: 800px;
+        margin: -15px auto 30px auto; /* Pull it slightly up towards the carousel */
+        padding: 10px;
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Match carousel shadow */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        border-top: 1px solid var(--border-color); /* Separator from carousel dots */
+        padding-top: 25px; /* Adjust padding if needed */
+    }
+
+    .thumbnail-item {
+        width: 100px; /* Fixed width for thumbnails */
+        height: 70px; /* Fixed height for thumbnails */
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .thumbnail-item:hover {
+        border-color: var(--card-accent-color);
+        transform: translateY(-2px);
+    }
+
+    .thumbnail-item.active {
+        border-color: var(--card-accent-color);
+        box-shadow: 0 0 0 3px rgba(var(--card-accent-rgb), 0.5); /* Outer glow for active */
+    }
+
+    .thumbnail-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* --- Lightbox / Modal Styles (No Change) --- */
+    .image-lightbox-overlay {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+    }
+
+    .lightbox-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain; /* Ensure entire image is visible */
+        transition: transform 0.3s ease;
+    }
+
+    .lightbox-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .lightbox-close-btn:hover,
+    .lightbox-close-btn:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .lightbox-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 2rem;
+        border-radius: 50%;
+        z-index: 1001;
+        transition: background-color 0.3s ease;
+        width: 55px; /* Larger size for lightbox nav */
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox-nav:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .lightbox-nav.prev {
+        left: 30px;
+    }
+
+    .lightbox-nav.next {
+        right: 30px;
+    }
+
+    /* Hide initial image gallery from previous design */
+    .detail-image-gallery {
+        display: none; /* Hide the old grid layout if you have it */
+    }
+
+    .detail-content {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .detail-price {
+        font-size: 2.5rem;
+        color: var(--card-accent-color);
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .detail-features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        padding: 20px 0;
+    }
+
+    .detail-feature-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        font-size: 1.1em;
+        color: var(--light-text-color);
+        font-weight: 600;
+        text-align: center;
+        min-width: 100px;
+    }
+
+    .detail-feature-item i {
+        color: var(--card-accent-color);
+        font-size: 1.8em;
+    }
+
+    .detail-description h2 {
+        font-size: 1.8rem;
+        color: var(--text-color);
+        margin-bottom: 15px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .detail-description p {
+        font-size: 1.05rem;
+        color: var(--light-text-color);
+        line-height: 1.7;
+        text-align: justify;
+    }
+
+    .back-button-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn-back {
+        background-color: var(--light-text-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-back:hover {
+        background-color: #555;
+    }
+
+    /* Responsive adjustments for detail page */
+    @media (max-width: 768px) {
+        .detail-container {
+            padding: 15px;
+            margin-top: calc(var(--navbar-height) + 15px);
+        }
+        .detail-title {
+            font-size: 2rem;
+        }
+        .detail-location {
+            font-size: 1rem;
+        }
+        .detail-price {
+            font-size: 2rem;
+        }
+        .detail-features {
+            padding: 15px 0;
+            gap: 15px;
+        }
+        .detail-feature-item {
+            font-size: 1em;
+            min-width: 80px;
+        }
+        .detail-feature-item i {
+            font-size: 1.5em;
+        }
+        .detail-description h2 {
+            font-size: 1.5rem;
+        }
+        .detail-description p {
+            font-size: 0.95rem;
+        }
+        /* Responsive adjustments for carousel and lightbox */
+        .carousel-nav {
+            font-size: 1.2rem;
+            width: 35px;
+            height: 35px;
+            padding: 5px 10px;
+        }
+        .carousel-dots-container {
+            padding: 10px 0;
+        }
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            margin: 0 4px;
+        }
+        .lightbox-nav {
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            padding: 5px 10px;
+            left: 15px;
+            right: 15px;
+        }
+        .lightbox-close-btn {
+            font-size: 30px;
+            top: 15px;
+            right: 25px;
+        }
+        .thumbnail-item {
+            width: 80px;
+            height: 60px;
+        }
+    }
+    @media (max-width: 480px) {
+        .detail-container {
+            padding: 10px;
+        }
+        .detail-title {
+            font-size: 1.8rem;
+        }
+        .detail-price {
+            font-size: 1.8rem;
+        }
+        .thumbnail-item {
+            width: 60px;
+            height: 45px;
+        }
+    }
 
 .search-button-main {
     background-color: var(--primary-color);

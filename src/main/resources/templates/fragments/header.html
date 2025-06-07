@@ -12,7 +12,7 @@
             <span class="logo-rp">Real estate</span>
         </a>
         <ul class="nav-menu">
-            <li class="nav-item"><a href="/all" class="nav-link">Properties</a></li>
+            <li class="nav-item"><a href="/products/all" class="nav-link">Properties</a></li>
             <li class="nav-item"><a href="#" class="nav-link">About</a></li>
             <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
             <th:block th:if="${session.sessionToken == null}">
@@ -20,7 +20,6 @@
             </th:block>
             <th:block th:if="${session.sessionToken != null}">
                 <li class="nav-item"><a href="/auth/logout" class="nav-link nav-link-signin">Излез</a></li>
-
             </th:block>
         </ul>
     </div>

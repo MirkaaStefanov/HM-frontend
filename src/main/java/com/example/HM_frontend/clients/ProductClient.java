@@ -23,7 +23,7 @@ public interface ProductClient {
     List<ProductDTO> findAll();
 
     @GetMapping("/findById/{id}")
-    ProductDTO findById(@PathVariable Long id, @RequestHeader("Authorization") String auth);
+    ProductDTO findById(@PathVariable Long id);
 
     @PutMapping("/edit/{id}")
     ProductDTO update(@PathVariable Long id, @RequestBody ProductDTO firstProductDTO, @RequestHeader("Authorization") String auth);

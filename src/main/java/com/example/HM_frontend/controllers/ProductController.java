@@ -98,7 +98,7 @@ public class ProductController {
     @GetMapping("/{id}") // e.g., /product/123
     public String productDetail(@PathVariable Long id, Model model, HttpServletRequest request) {
         String token = (String) request.getSession().getAttribute("sessionToken");
-        ProductDTO product = productClient.findById(id, token);
+        ProductDTO product = productClient.findById(id);
         model.addAttribute("product", product);
         return "Product/detail";
     }
